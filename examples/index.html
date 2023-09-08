@@ -44,6 +44,9 @@
             <h3 class="govuk-heading-m">Raw HTML Input</h3>
             <pre id="paste-raw-html-input"></pre>
 
+            <h3 class="govuk-heading-m">Markdown table </h3>
+            <pre id="paste-markdown-table"></pre>
+
             <h3 class="govuk-heading-m">Formatted HTML Input</h3>
             <pre id="paste-formatted-html-input"></pre>
 
@@ -66,11 +69,15 @@
         <h2 class="govuk-heading-m">Govspeak</h2>
         <pre id="html-govspeak"></pre>
 
+        <processor></processor>
+
         <script src="dist/paste-html-to-markdown.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.9.0/beautify-html.js"></script>
+        <script src="dist/table-converter.js"></script>
         <script>
           var pasteTextarea = document.getElementById('paste-textarea')
           var pasteRawHtmlInputElement = document.getElementById('paste-raw-html-input')
+          var pasteMarkdownTable = document.getElementById('paste-markdown-table')
           var pasteFormattedHtmlInputElement = document.getElementById('paste-formatted-html-input')
           var pasteTextInputElement = document.getElementById('paste-text-input')
           var pasteGovspeakElement = document.getElementById('paste-govspeak')
@@ -92,9 +99,18 @@
                 console.error('Failed to make the HTML pretty: ' + err.message)
                 pasteFormattedHtmlInputElement.textContent = 'HTML failed to be formatted'
               }
+              pasteRawHtmlInputElement.textContent = e.detail
+
+              try {
+                pasteMarkdownTable.textContent = convertTable(e.detail)
+              } catch (err) {
+                console.error('Failed to convert to markdown: ' + err.message)
+                pasteMarkdownTable.textContent = 'HTML failed to be converted'
+              }
             } else {
               pasteRawHtmlInputElement.textContent = 'HTML was not pasted'
               pasteFormattedHtmlInputElement.textContent = 'HTML was not pasted'
+              pasteMarkdownTable.textContent = 'HTML was not pasted'
             }
           })
 

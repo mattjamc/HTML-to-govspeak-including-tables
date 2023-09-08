@@ -5,10 +5,13 @@ import legacyHtmlFromPaste from './legacy-html-from-paste'
 function htmlFromPasteEvent (event) {
   // Modern browsers
   if (event.clipboardData) {
+    console.log('We got this from the clipboard:')
+    console.log(event.clipboardData.getData('text/html'))
     return event.clipboardData.getData('text/html')
   } else {
     // IE doesn't support event.clipboardData, whereas it's supported by most
     // other major browsers
+    console.log('Doing the legacy way - clipboardData not supported')
     return legacyHtmlFromPaste()
   }
 }
@@ -39,6 +42,7 @@ function pasteListener (event) {
   const element = event.target
 
   const html = htmlFromPasteEvent(event)
+  console.log(html)
   triggerPasteEvent(element, 'htmlpaste', html)
 
   const text = textFromPasteEvent(event)
